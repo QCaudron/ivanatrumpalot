@@ -1,3 +1,6 @@
+![Make America Hate Again](https://github.com/QCaudron/ivanatrumpalot/blob/master/images/banner.jpg)
+
+
 Ivana Trumpalot
 ===============
 
