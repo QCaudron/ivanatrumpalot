@@ -60,13 +60,14 @@ for i, sentence in enumerate(sentences):
 # The current model is a four-layer LSTM network with a dropout layer between each hidden layer.
 print("Building the model.")
 model = Sequential()
-model.add(LSTM(128, return_sequences=True, input_shape=(primer_length, len(alphabet)))
+model.add(LSTM(128, return_sequences=True, init="glorot_uniform", 
+               input_shape=(primer_length, len(alphabet)))
 model.add(Dropout(0.2))
-model.add(LSTM(256, return_sequences=True))
+model.add(LSTM(256, return_sequences=True, init="glorot_uniform"))
 model.add(Dropout(0.2))
-model.add(LSTM(512, return_sequences=True))
+model.add(LSTM(512, return_sequences=True, init="glorot_uniform"))
 model.add(Dropout(0.2))
-model.add(LSTM(512, return_sequences=False))
+model.add(LSTM(512, return_sequences=False, init="glorot_uniform"))
 model.add(Dropout(0.2))
 model.add(Dense(len(alphabet)))
 model.add(Activation('softmax'))
@@ -91,7 +92,7 @@ for iteration in range(1, 50):
     print("Iteration", iteration)
 
     # Train the model for five epochs
-    model.fit(X, y, batch_size=128, nb_epoch=5)
+    model.fit(X, y, batch_size=128, nb_epoch=5, shuffle=True)
 
     # Pick a random part of the text to use as a prompt
     start_index = random.randint(0, len(text) - primer_length - 1)
