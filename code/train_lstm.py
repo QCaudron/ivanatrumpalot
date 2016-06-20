@@ -87,7 +87,7 @@ model.summary()
 
 # Train the model for 250 epochs, outputting some generated text every five iterations
 # Save the model every five epochs, just in case training is interrupted
-for iteration in range(1, 2):
+for iteration in range(1, 50):
     print("\n" + "-" * 50)
     print("Iteration {}".format(iteration))
 
@@ -105,11 +105,11 @@ for iteration in range(1, 2):
         generated = ""
         sentence = text[start_index : start_index + primer_length]
         generated += sentence
-        print('----- Generating with prompt : "' + sentence + '"')
+        print("----- Generating with prompt : {}".format(sentence))
         sys.stdout.write(generated)
 
         # Generate 200 characters
-        for i in range(200):
+        for i in range(100):
             x = np.zeros((1, primer_length, len(alphabet)))
             for t, char in enumerate(sentence):
                 x[0, t, alphabet_indices[char]] = 1.

@@ -12,9 +12,11 @@ def clean_text(text):
 
     # Encode from unicode, ignoring characters that don't make sense in standard speech
     try:
-        text = unicode(text, errors="ignore")
+        text = unicode(str(text), errors="ignore")
     except:
         pass
+
+    text = text.replace("Z", "z")
 
     # Fix a few problems : nuisance characters, new lines, extra spaces...
     nuisance_chars = ["\n", "=", "(", ")", "[", "[", "/"]
@@ -38,7 +40,7 @@ def clean_text(text):
 def predict(text):
 
     # Characters to predict
-    prediction_length = 100
+    prediction_length = 80
 
     # Temperature of the Boltzmann distribution
     temperature = 0.2
