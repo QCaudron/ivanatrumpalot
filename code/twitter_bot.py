@@ -5,6 +5,7 @@ import time
 import numpy as np
 import pickle
 import datetime
+import random
 
 my_name = 'ivanatrumpalot'
 
@@ -12,6 +13,8 @@ users_to_respond = ['BernieSanders',
          'HillaryClinton',
          'BarackObama',
          'WhiteHouse']
+
+hash_tags = ['MakeAmericaGreatAgain', 'Trump2016', 'AmericaFirst', 'TrumpDallas', 'Trump', 'TrumpTrain']
 
 class TweetIDs:
     #class for storing and retrieving most recent tweet IDs for all users being
@@ -66,13 +69,16 @@ def respondToUser(twt):
     #respond to user with twt_text as input
     #TODO: put in keras function to generate tweet.
     status = ''
+    status += '#' + random.choice(hash_tags)
     api.PostUpdate(status,in_reply_to_status_id=twt.id)
     print 'posted "{}" in reply to @{}'.format(status,twt.user.screen_name)
 
 def randomTweet():
     #TODO: put in keras function to generate tweet without text
     status = ''
+    status += '#' + random.choice(hash_tags)
     api.PostUpdate(status)
+    print 'posted tweet: {}'.format(status)
 
 def findUserTweet(user):
     #finds most recent tweet from user
