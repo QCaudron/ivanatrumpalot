@@ -23,10 +23,10 @@ from ivanatrumpalot import clean_text, predict, sample
 # If the string "predict" is passed,
 
 # Read and clean corpus
-text = clean_text(open("trump_corpus").read())
+text = clean_text(open("../data/trump_corpus").read())
 
 # Corpus length
-print("Corpus : {} characters, approximately {} words.".format(len(text), len(text.split("."))))
+print("Corpus : {} characters, approximately {} sentences.".format(len(text), len(text.split("."))))
 
 # Generate a dictionaries mapping from characters in our alphabet to an index, and the reverse
 alphabet = set(text)
@@ -70,7 +70,7 @@ with open("required_objects.pickle", "wb") as f:
 print("Building the model.")
 model = Sequential()
 model.add(LSTM(128, return_sequences=True, init="glorot_uniform",
-               input_shape=(primer_length, len(alphabet)))
+               input_shape=(primer_length, len(alphabet))))
 model.add(Dropout(0.2))
 model.add(LSTM(256, return_sequences=True, init="glorot_uniform"))
 model.add(Dropout(0.2))
@@ -89,13 +89,13 @@ model.summary()
 # Save the model every five epochs, just in case training is interrupted
 for iteration in range(1, 2):
     print("\n" + "-" * 50)
-    print("Iteration", iteration)
+    print("Iteration {}".format(iteration))
 
     # Train the model for five epochs
     model.fit(X, y, batch_size=128, nb_epoch=5, shuffle=True)
 
     # Pick a random part of the text to use as a prompt
-    start_index = random.randint(0, len(text) - primer_length - 1)
+    start_index = np.random.randint(0, len(text) - primer_length - 1)
 
     # For various energies in the probability distribution,
     # create some 200-character sample strings
