@@ -1,21 +1,22 @@
 import os
 import json
-from twitter import Api
 import time
 import numpy as np
 import pickle
+from twitter import Api
 
-users_to_respond = ['BernieSanders',
-         'HillaryClinton',
-         'BarackObama']
+users_to_respond = ['BernieSanders', 'HillaryClinton', 'BarackObama', 'WhiteHouse']
+
 
 class TweetIDs:
     #class for storing and retrieving most recent tweet IDs for all users being
     filename = 'user_tweet_ids'
+ 
     @staticmethod
     def setIDs(user_tweet_ids):
         with open(TweetIDs.filename, 'wb') as f:
             pickle.dump(user_tweet_ids, f)
+			
     @staticmethod
     def readIDs():
         try:
@@ -24,12 +25,12 @@ class TweetIDs:
             return user_tweet_ids
         except:
             return [0 for u in range(len(users_to_respond))]
+
+
 # Either specify a set of keys here or use os.getenv('CONSUMER_KEY') style
 # assignment:
-with open('api_keys', 'rb') as f:
+with open('secrets/api_keys', 'rb') as f:
     api_keys = pickle.load(f)
-
-
 
 # read in most recent tweet ids from file.
 user_tweet_ids = TweetIDs.readIDs()
@@ -41,14 +42,6 @@ api = Api(api_keys['CONSUMER_KEY'],
           api_keys['ACCESS_TOKEN_SECRET'])
 
 
-
-
-def updateEveryHour():
-    while(True):
-        #TODO: create random sentence.
-        status = ''
-        api.PostUpdate(status)
-        time.sleep(60*60)
 
 def respondToUser(twt):
     #respond to user with twt_text as input
