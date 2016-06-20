@@ -6,6 +6,7 @@ import numpy as np
 import pickle
 import datetime
 import random
+from ivanatrumpalot import predict
 
 my_name = 'ivanatrumpalot'
 
@@ -41,7 +42,7 @@ class TweetIDs:
             return [0 for u in range(len(users_to_respond))]
 # load in api_keys dictionary with keys: CONSUMER_KEY, CONSUMER_SECRET,
 # ACCESS_TOKEN, ACCESS_TOKEN_SECRET
-with open('api_keys', 'rb') as f:
+with open('../secrets/api_keys', 'rb') as f:
     api_keys = pickle.load(f)
 
 
@@ -67,15 +68,15 @@ api = Api(api_keys['CONSUMER_KEY'],
 
 def respondToUser(twt):
     #respond to user with twt_text as input
-    #TODO: put in keras function to generate tweet.
-    status = ''
+
+    status = predict(twt.text)
     status += '#' + random.choice(hash_tags)
     api.PostUpdate(status,in_reply_to_status_id=twt.id)
     print 'posted "{}" in reply to @{}'.format(status,twt.user.screen_name)
 
 def randomTweet():
-    #TODO: put in keras function to generate tweet without text
-    status = ''
+
+    status = predict()
     status += '#' + random.choice(hash_tags)
     api.PostUpdate(status)
     print 'posted tweet: {}'.format(status)
