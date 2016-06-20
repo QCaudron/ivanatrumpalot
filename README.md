@@ -12,7 +12,7 @@
 Wait, what now ?
 ----------------
 
-Ivana Trumpalot is a Twitter bot that uses a deep neural network to generate text that sounds like extracts of Donald Trump's speeches. It's currently not quite online, we're putting the finishing touches to it.
+Ivana Trumpalot is an Ivana Trumpa**bot** that uses a deep neural network to generate text that sounds like Donald Trump's speeches. It's currently not quite online, we're putting the finishing touches to it. We'll be continually training it over the near future to improve its Trumpiness.
 
 
 

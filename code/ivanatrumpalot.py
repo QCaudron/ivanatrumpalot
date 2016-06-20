@@ -92,13 +92,11 @@ def predict(text):
         y += next_char
 
     """
-    # Remove the primer, then remove characters until the first sentence
+    # Remove the primer from the predictions
     y = y[-prediction_length:]
-    while y[0] != ".":
-        y = y[1:]
-    y = y[2:]
-    while y[-1] != ".":
-        y = y[:-1]
+
+    # Remove characters left and right such that we only have full sentences
+    y = ". ".join(y.split(". ")[1:-1]) + "."
     """
     y = y[-prediction_length:]
 

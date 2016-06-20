@@ -100,7 +100,7 @@ for iteration in range(1, 50):
     # For various energies in the probability distribution,
     # create some 200-character sample strings
     for diversity in [0.2, 0.5, 1.0, 1.2]:
-        print("\n----- Diversity : ", diversity)
+        print("\n----- Diversity : {}".format(diversity))
 
         generated = ""
         sentence = text[start_index : start_index + primer_length]
@@ -108,7 +108,7 @@ for iteration in range(1, 50):
         print("----- Generating with prompt : {}".format(sentence))
         sys.stdout.write(generated)
 
-        # Generate 200 characters
+        # Generate 100 characters
         for i in range(100):
             x = np.zeros((1, primer_length, len(alphabet)))
             for t, char in enumerate(sentence):
