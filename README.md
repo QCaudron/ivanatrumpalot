@@ -1,16 +1,29 @@
+![Status](https://img.shields.io/badge/status-offline-red.svg)
+
 ![Make America Hate Again](https://github.com/QCaudron/ivanatrumpalot/blob/master/images/banner.jpg)
 
 
-Ivana Trumpalot
-===============
+[@IvanaTrumpalot](https://twitter.com/IvanaTrumpalot)
+=====================================================
 
 *A deep learning bot trained on the crap coming out of Donald Trump's mouth.*
 
 
-Twitter
--------
+Wait, what now ?
+----------------
 
-[@IvanaTrumpalot](https://twitter.com/IvanaTrumpalot) tweets once an hour. She will answer your tweets directed at her. She also answers the tweets of [@BernieSanders](https://twitter.com/berniesanders), [@HillaryClinton](https://twitter.com/hillaryclinton), [@BarackObama](https://twitter.com/barackobama), and [@WhiteHouse](https://twitter.com/whitehouse), hopefully with a witty, on-topic slice of Trumpian wisdom. Got a target in mind ? Let us know by opening up an issue.
+Ivana Trumpalot is a Twitter bot that uses a deep neural network to generate text that sounds like extracts of Donald Trump's speeches. It's currently not quite online, we're putting the finishing touches to it.
+
+
+
+Bot Functionality
+-----------------
+
+- [@IvanaTrumpalot](https://twitter.com/IvanaTrumpalot) tweets once an hour.
+- It will answer you if you tweet using its handle.
+- It also answers the tweets of [@BernieSanders](https://twitter.com/berniesanders), [@HillaryClinton](https://twitter.com/hillaryclinton), [@BarackObama](https://twitter.com/barackobama), and [@WhiteHouse](https://twitter.com/whitehouse), hopefully with a witty, on-topic slice of Trumpian wisdom.
+
+Got another Twitter user in mind ? Let us know by opening up an issue.
 
 
 Network
@@ -25,10 +38,16 @@ Data
 We downloaded a handful of Trump's speeches, purged them for special characters we didn't want to keep, and removed any audience participation that was transcribed the the speeches. The corpus currently consists of about 250,000 characters, or 46,000 words. This corpus is also available in this repo.
 
 
+Hardware
+--------
+
+The live version of Ivana Trumpalot runs off a Raspberry Pi 3, where text is generated and tweets are sent to Twitter. The network was trained on a GTX 980 Ti, where an epoch takes about three minutes to run at the current architecture.
+
+
 Usage
 -----
 
-**Training** : To train the model, simply call `code/train_lstm.py`. Feel free to change the parameters and architecture of the network, as well as the dataset you use. The network will be saved to disk every five epochs. On a GTX 980 Ti, it takes about three minutes per epoch.
+**Training** : To train the model, simply call `code/train_lstm.py`. Feel free to change the parameters and architecture of the network, as well as the dataset you use. The network will be saved to disk every five epochs.
 
 **Predictions** : Using the `predict()` function in `code/ivanatrumpalot.py`, feed it some text and it will generate some output for you.
 
