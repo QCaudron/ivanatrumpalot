@@ -68,9 +68,9 @@ api = Api(api_keys['CONSUMER_KEY'],
 
 def respondToUser(twt):
     #respond to user with twt_text as input
-
     status = predict(twt.text)
-    status += '#' + random.choice(hash_tags)
+    status = '@' + twt.user.screen_name + ' ' + status
+    status += ' #' + random.choice(hash_tags)
     api.PostUpdate(status,in_reply_to_status_id=twt.id)
     print 'posted "{}" in reply to @{}'.format(status,twt.user.screen_name)
 
