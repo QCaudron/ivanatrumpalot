@@ -1,22 +1,29 @@
 import os
 import json
-from twitter import Api
 import time
 import numpy as np
 import pickle
+from twitter import Api
 
+users_to_respond = ['BernieSanders', 'HillaryClinton', 'BarackObama', 'WhiteHouse']
+
+<<<<<<< HEAD
+=======
 users_to_respond = ['BernieSanders',
          'HillaryClinton',
          'BarackObama',
          'WhiteHouse']
+>>>>>>> 79a4dcb6c55d1c0e81923b178f110855f26cdb2c
 
 class TweetIDs:
     #class for storing and retrieving most recent tweet IDs for all users being
     filename = 'user_tweet_ids'
+ 
     @staticmethod
     def setIDs(user_tweet_ids):
         with open(TweetIDs.filename, 'wb') as f:
             pickle.dump(user_tweet_ids, f)
+			
     @staticmethod
     def readIDs():
         try:
@@ -33,12 +40,18 @@ class TweetIDs:
             return user_tweet_ids
         except:
             return [0 for u in range(len(users_to_respond))]
+<<<<<<< HEAD
+
+
+# Either specify a set of keys here or use os.getenv('CONSUMER_KEY') style
+# assignment:
+with open('secrets/api_keys', 'rb') as f:
+=======
 # load in api_keys dictionary with keys: CONSUMER_KEY, CONSUMER_SECRET,
 # ACCESS_TOKEN, ACCESS_TOKEN_SECRET
 with open('api_keys', 'rb') as f:
+>>>>>>> 79a4dcb6c55d1c0e81923b178f110855f26cdb2c
     api_keys = pickle.load(f)
-
-
 
 # read in most recent tweet ids from file.
 user_tweet_ids = TweetIDs.readIDs()
@@ -50,6 +63,10 @@ api = Api(api_keys['CONSUMER_KEY'],
           api_keys['ACCESS_TOKEN_SECRET'])
 
 
+<<<<<<< HEAD
+
+=======
+>>>>>>> 79a4dcb6c55d1c0e81923b178f110855f26cdb2c
 def respondToUser(twt):
     #respond to user with twt_text as input
     #TODO: put in keras function to generate tweet.

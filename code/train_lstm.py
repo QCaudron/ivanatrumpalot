@@ -1,66 +1,75 @@
 import sys
 import re
 import numpy as np
+import json
+import pickle
 
-from keras.models import Sequential
+from keras.models import Sequential, model_from_json
 from keras.layers import Dense, Activation, Dropout
 from keras.layers import LSTM
+
+from ivanatrumpalot import clean_text, predict, sample
 
 
 # This code is heavily influenced by the Keras example code on LSTM for text generation :
 # https://github.com/fchollet/keras/blob/master/examples/lstm_text_generation.py
 
+# USAGE :
+# python train_lstm.py [mode]
+# If no arguments are passed, this will train a new model, saving the model's architecture
+# to model.json and its weights to weights.h5.
+# If [mode] is passed, valid options are "extend" and "predict".
+# If the string "extend" is passed, they must be the files saved by train_lstm.py previously.
+# If the string "predict" is passed,
 
-# Read corpus
-text = open("trump_corpus").read()
-
-# Encode from unicode, ignoring characters that don't make sense in standard speech
-text = unicode(text,errors='ignore')
-
-# Fix a few problems : nuisance characters, new lines, extra spaces...
-nuisance_chars = ["\n", "=", "(", ")", "[", "[", "/"]
-for char in nuisance_chars:
-    text = text.replace(char, "")
-
-# Look for blocks of several capital letters in a row, followed by a colon, and remove them
-# These are typically things like "AUDIENCE:"
-text = re.sub(r"[A-Z]+:", "", text)
+# Read and clean corpus
+text = clean_text(open("trump_corpus").read())
 
 # Corpus length
-print("Corpus length : {} characters, approximately {} words.".format(len(text), len(text.split("."))))
+print("Corpus : {} characters, approximately {} words.".format(len(text), len(text.split("."))))
 
 # Generate a dictionaries mapping from characters in our alphabet to an index, and the reverse
 alphabet = set(text)
+alphabet_size = len(alphabet)
 alphabet_indices = dict((c, i) for i, c in enumerate(alphabet))
 indices_alphabet = dict((i, c) for i, c in enumerate(alphabet))
-print("Size of the alphabet : {} characters.".format(len(alphabet))
+print("Size of the alphabet : {} characters.".format(alphabet_size))
 
 # Generate sequences of characters that the RNN will use to predict the next character.
-primer_length = 60
+primer_length = 50
 step = 3
 sentences = []
 next_character = []
 for i in range(0, len(text) - primer_length, step):
     sentences.append(text[i : i + primer_length])
-    next_chars.append(text[i + primer_length])
+    next_character.append(text[i + primer_length])
 print("Number of sequences generated from the corpus : {}.".format(len(sentences)))
 
 # Vectorise the text sequences : go from N sentences of length primer_length to
 # a binary array of size (N, primer_length, alphabet_size). Do the same for the
 # next_character array.
 print("Vectorising.")
-X = np.zeros((len(sentences), primer_length, len(alphabet_size)), dtype=np.bool)
-y = np.zeros((len(sentences), len(alphabet)), dtype=np.bool)
+X = np.zeros((len(sentences), primer_length, alphabet_size), dtype=np.bool)
+y = np.zeros((len(sentences), alphabet_size), dtype=np.bool)
 for i, sentence in enumerate(sentences):
     for t, char in enumerate(sentence):
-        X[i, t, char_indices[char]] = 1
-    y[i, char_indices[next_chars[i]]] = 1
+        X[i, t, alphabet_indices[char]] = 1
+    y[i, alphabet_indices[next_character[i]]] = 1
+
+# Pickle the necessary objects for future prediction
+required_objects = { "alphabet" : alphabet,
+                     "alphabet_indices" : alphabet_indices,
+                     "indices_alphabet" : indices_alphabet,
+                     "primer_length" : primer_length
+                   }
+with open("required_objects.pickle", "wb") as f:
+    pickle.dump(required_objects, f)
 
 
 # The current model is a four-layer LSTM network with a dropout layer between each hidden layer.
 print("Building the model.")
 model = Sequential()
-model.add(LSTM(128, return_sequences=True, init="glorot_uniform", 
+model.add(LSTM(128, return_sequences=True, init="glorot_uniform",
                input_shape=(primer_length, len(alphabet)))
 model.add(Dropout(0.2))
 model.add(LSTM(256, return_sequences=True, init="glorot_uniform"))
@@ -76,18 +85,9 @@ model.compile(loss='categorical_crossentropy', optimizer='adam')
 model.summary()
 
 
-# Helper function :
-# Sample from a Boltzmann distribution with energies proportional to the probabilities
-# returned by the LSTM network, as a function of a temperature parameter
-def sample(energies, temperature=1.0):
-    energies = np.log(energies) / temperature
-    energies = np.exp(energies) / np.sum(np.exp(energies))
-    return np.argmax(np.random.multinomial(1, energies))
-
-
 # Train the model for 250 epochs, outputting some generated text every five iterations
 # Save the model every five epochs, just in case training is interrupted
-for iteration in range(1, 50):
+for iteration in range(1, 2):
     print("\n" + "-" * 50)
     print("Iteration", iteration)
 
@@ -97,7 +97,7 @@ for iteration in range(1, 50):
     # Pick a random part of the text to use as a prompt
     start_index = random.randint(0, len(text) - primer_length - 1)
 
-    # For various energies in the probability distribution, 
+    # For various energies in the probability distribution,
     # create some 200-character sample strings
     for diversity in [0.2, 0.5, 1.0, 1.2]:
         print("\n----- Diversity : ", diversity)
@@ -110,13 +110,13 @@ for iteration in range(1, 50):
 
         # Generate 200 characters
         for i in range(200):
-            x = np.zeros((1, primer_length, len(chars)))
+            x = np.zeros((1, primer_length, len(alphabet)))
             for t, char in enumerate(sentence):
-                x[0, t, char_indices[char]] = 1.
+                x[0, t, alphabet_indices[char]] = 1.
 
             predictions = model.predict(x, verbose=0)[0]
             next_index = sample(predictions, diversity)
-            next_char = indices_char[next_index]
+            next_char = indices_alphabet[next_index]
 
             generated += next_char
             sentence = sentence[1:] + next_char
