@@ -2,6 +2,7 @@ import sys
 import re
 import numpy as np
 import json
+import pickle
 
 from keras.models import model_from_json
 
@@ -34,10 +35,10 @@ def clean_text(text):
 
 
 
-def predict(text=None):
+def predict(text):
 
     # Characters to predict
-    prediction_length = 140
+    prediction_length = 100
 
     # Temperature of the Boltzmann distribution
     temperature = 0.2
