@@ -1,4 +1,4 @@
-![Status](https://img.shields.io/badge/status-offline-red.svg)
+![Status](https://img.shields.io/badge/status-offline-red.svg) ![Neural net version](https://img.shields.io/badge/LSTM-v1-lightgrey.svg)
 
 ![Make America Hate Again](https://github.com/QCaudron/ivanatrumpalot/blob/master/images/banner.jpg)
 
