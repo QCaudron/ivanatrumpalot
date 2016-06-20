@@ -3,9 +3,7 @@ import re
 import numpy as np
 import json
 
-from keras.models import Sequential, model_from_json
-from keras.layers import Dense, Activation, Dropout
-from keras.layers import LSTM
+from keras.models import model_from_json
 
 
 
@@ -39,15 +37,23 @@ def clean_text(text):
 def predict(text):
 
     # Characters to predict
-    prediction_length = 200
+    prediction_length = 140
 
     # Temperature of the Boltzmann distribution
     temperature = 0.2
 
     # Load and compile the current model
-    model = model_from_json(json.dumps(json.load(open("../model.json"))))
-    model.load_weights("../weights.h5")
+    model = model_from_json(json.dumps(json.load(open("model.json"))))
+    model.load_weights("weights.h5")
     model.compile(loss="categorical_crossentropy", optimizer="adam")
+
+    # Read in the required objects
+    with open("required_objects.pickle", "rb") as f:
+        required_objects = pickle.load(f)
+    alphabet = required_objects["alphabet"]
+    alphabet_indices = required_objects["alphabet_indices"]
+    indices_alphabet = required_objects["indices_alphabet"]
+    primer_length = required_objects["primer_length"]
 
     # Clean the input text, ensuring it's exactly primer_length characters long
     if text:
@@ -59,17 +65,9 @@ def predict(text):
     # If we weren't passed text, pick something random from the corpus
     else:
         with open("../data/trump_corpus", "r") as f:
-            corpus = f.read()
+            corpus = clean_text(f.read())
         idx = np.random.randint(0, len(corpus) - primer_length)
         text = corpus[idx : idx + primer_length]
-
-    # Read in the required objects
-    with open("required_objects.pickle", "rb") as f:
-        required_objects = pickle.load(f)
-    alphabet = required_objects["alphabet"]
-    alphabet_indices = required_objects["alphabet_indices"]
-    indices_alphabet = required_objects["indices_alphabet"]
-    primer_length = required_objects["primer_length"]
 
     # Initialise the predictions array
     y = text
@@ -79,8 +77,8 @@ def predict(text):
 
         # Initialise the prompt and
         X = np.zeros((1, primer_length, len(alphabet)))
-        for idx, char in enumerate(text[-primer_length:]):
-            X[idx, alphabet_indices[char]] = 1
+        for idx, char in enumerate(y[-primer_length:]):
+            X[0, idx, alphabet_indices[char]] = 1.
 
         # Make predictions character by character
         predictions = model.predict(X, verbose=0)[0]
@@ -90,9 +88,18 @@ def predict(text):
         # Add the prediction to the output array
         y += next_char
 
+    """
+    # Remove the primer, then remove characters until the first sentence
+    y = y[-prediction_length:]
+    while y[0] != ".":
+        y = y[1:]
+    y = y[2:]
+    while y[-1] != ".":
+        y = y[:-1]
+    """
+    y = y[-prediction_length:]
+
     return y
-
-
 
 
 # Helper function :
