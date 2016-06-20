@@ -22,5 +22,9 @@ Ivana Trumpalot is currently a recurrent neural network with two hidden layers, 
 Data
 ----
 
-We downloaded a handful of Trump's speeches, purged them for special characters we didn't want to keep, and removed any audience participation that was transcribed the the speeches. The corpus currently consists of about 230,000 characters, or 45,000 words. This corpus is also available in this repo.
+We downloaded a handful of Trump's speeches, purged them for special characters we didn't want to keep, and removed any audience participation that was transcribed the the speeches. The corpus currently consists of about 246,000 characters, or 46,000 words. This corpus is also available in this repo.
 
+
+### The Name
+
+Ivana Trumpalot is, of course, a reference to the antagonist in *Austin Powers 2 : The Spy Who Shagged Me*. She's groovy, baby. Ivana Trump is also Donald Trump's wife. This isn't a personal attack at her; you must understand, the name was simply too great to pass up. We have the best names. The best names.
