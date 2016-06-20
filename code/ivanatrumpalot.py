@@ -34,7 +34,7 @@ def clean_text(text):
 
 
 
-def predict(text):
+def predict(text=None):
 
     # Characters to predict
     prediction_length = 140
