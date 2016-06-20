@@ -3,6 +3,7 @@ import re
 import numpy as np
 import json
 import pickle
+from string import ascii_letters
 
 from keras.models import Sequential, model_from_json
 from keras.layers import Dense, Activation, Dropout
@@ -29,7 +30,7 @@ text = clean_text(open("../data/trump_corpus").read())
 print("Corpus : {} characters, approximately {} sentences.".format(len(text), len(text.split("."))))
 
 # Generate a dictionaries mapping from characters in our alphabet to an index, and the reverse
-alphabet = set(text)
+alphabet = set(text).union(set(ascii_letters)).union(set("1234567890"))
 alphabet_size = len(alphabet)
 alphabet_indices = dict((c, i) for i, c in enumerate(alphabet))
 indices_alphabet = dict((i, c) for i, c in enumerate(alphabet))
