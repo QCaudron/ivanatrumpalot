@@ -51,7 +51,7 @@ Usage
 
 **Predictions** : Using the `predict()` function in `code/ivanatrumpalot.py`, feed it some text and it will generate some output for you.
 
-**Twitter** : If you want to set up a Twitter bot, we use [this package](https://github.com/sixohsix/twitter). Don't forget to feed your API keys to `code/twitter_bot.py`.
+**Twitter** : If you want to set up a Twitter bot, we use [this package](https://github.com/bear/python-twitter). Don't forget to feed your API keys to `code/twitter_bot.py`.
 
 
 The Name
