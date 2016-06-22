@@ -8,7 +8,7 @@ import datetime
 import random
 from ivanatrumpalot import predict
 
-my_name = 'ivanatrumpalot'
+my_name = 'IvanaTrumpalot'
 
 users_to_respond = ['BernieSanders',
          'HillaryClinton',
@@ -55,8 +55,7 @@ with open('../secrets/api_keys', 'rb') as f:
 # read in most recent tweet ids from file.
 user_tweet_ids = TweetIDs.readIDs()
 
-#load dictionary of users had direct messages with, with most recent id.
-user_dm_filename = 'user_dm_twts'
+
 
 try:
     with open(user_dm_filename,'rb') as f:
@@ -124,9 +123,11 @@ def replyIfMessaged():
         user_dm_twts = {}
 
     #get 100 most recent messages addressed to my_name.
-    tweets = api.GetSearch(
-    raw_query="q=to%3A{}&result_type=recent&count=100".format(my_name))
-    all_user_names = [] #keep list of users replied to in this round to ensure only reply to most recent message.
+    tweets_messages = api.GetSearch(raw_query="q=to%3A{}&result_type=recent&count=100".format(my_name))
+    tweets_mentions = api.GetSearch(raw_query='q=%40{}'.format(my_name))
+    tweets = tweets_messages + tweets_mentions
+    #keep list of users replied to in this round to ensure only reply to most recent message.
+    all_user_names = []
 
 
     for twt in tweets:
