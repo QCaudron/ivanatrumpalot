@@ -86,7 +86,7 @@ def respondToUser(twt):
 def randomTweet():
 
     status = predict()
-    status += '#' + random.choice(hash_tags)
+    status += ' #' + random.choice(hash_tags)
     api.PostUpdate(status)
     print 'posted tweet: {}'.format(status)
 
