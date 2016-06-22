@@ -17,6 +17,11 @@ users_to_respond = ['BernieSanders',
 
 hash_tags = ['MakeAmericaGreatAgain', 'Trump2016', 'AmericaFirst', 'TrumpDallas', 'Trump', 'TrumpTrain']
 
+#alphabet used in training NN.
+with open("required_objects.pickle", "rb") as f:
+        required_objects = pickle.load(f)
+    alphabet = required_objects["alphabet"]
+
 class TweetIDs:
     #class for storing and retrieving most recent tweet IDs for all users being
     filename = 'user_tweet_ids'
@@ -68,7 +73,12 @@ api = Api(api_keys['CONSUMER_KEY'],
 
 def respondToUser(twt):
     #respond to user with twt_text as input
-    status = predict(twt.text)
+    text = twt.text
+    for l in set(text):
+        if l not in alphabet:
+            text = text.replace(l,' ')
+
+    status = predict(text)
     status = '@' + twt.user.screen_name + ' ' + status
     status += ' #' + random.choice(hash_tags)
     api.PostUpdate(status,in_reply_to_status_id=twt.id)
