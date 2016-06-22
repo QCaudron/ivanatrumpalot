@@ -79,16 +79,29 @@ def respondToUser(twt):
 
     status = predict(text)
     status = '@' + twt.user.screen_name + ' ' + status
-    status += ' #' + random.choice(hash_tags)
-    api.PostUpdate(status,in_reply_to_status_id=twt.id)
-    print('posted "{}" in reply to @{}'.format(status,twt.user.screen_name))
+    status_plus_hash = status + ' #' + random.choice(hash_tags)
+    if len(status_plus_hash)<140:
+        api.PostUpdate(status_plus_hash,in_reply_to_status_id=twt.id)
+        print('posted "{}" in reply to @{}'.format(status_plus_hash,twt.user.screen_name))
+    elif len(status)<140:
+        api.PostUpdate(status,in_reply_to_status_id=twt.id)
+        print('posted "{}" in reply to @{}'.format(status,twt.user.screen_name))
+    else:
+        print('Failed to post "{}" in reply to @{}. Character length over 140.'.format(status,twt.user.screen_name)) 
 
 def randomTweet():
 
     status = predict()
-    status += ' #' + random.choice(hash_tags)
-    api.PostUpdate(status)
-    print('posted tweet: {}'.format(status))
+    status_plus_hash = status + ' #' + random.choice(hash_tags)
+    #check if tweet is too long.
+    if len(status_plus_hash)<140:
+        api.PostUpdate(status_plus_hash)
+        print('posted tweet: {}'.format(status_plus_hash))
+    elif len(status)<140:
+        api.PostUpdate(status)
+        print('posted tweet: {}'.format(status))
+    else:
+        print('failed to send tweet: "{}". Over 140 characters.'.format(status))
 
 def findUserTweet(user):
     #finds most recent tweet from user
