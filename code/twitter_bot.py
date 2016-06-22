@@ -19,8 +19,8 @@ hash_tags = ['MakeAmericaGreatAgain', 'Trump2016', 'AmericaFirst', 'TrumpDallas'
 
 #alphabet used in training NN.
 with open("required_objects.pickle", "rb") as f:
-        required_objects = pickle.load(f)
-    alphabet = required_objects["alphabet"]
+    required_objects = pickle.load(f)
+alphabet = required_objects["alphabet"]
 
 class TweetIDs:
     #class for storing and retrieving most recent tweet IDs for all users being
