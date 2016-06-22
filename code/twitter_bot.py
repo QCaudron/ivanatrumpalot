@@ -19,8 +19,8 @@ hash_tags = ['MakeAmericaGreatAgain', 'Trump2016', 'AmericaFirst', 'TrumpDallas'
 
 #alphabet used in training NN.
 with open("required_objects.pickle", "rb") as f:
-        required_objects = pickle.load(f)
-    alphabet = required_objects["alphabet"]
+    required_objects = pickle.load(f)
+alphabet = required_objects["alphabet"]
 
 class TweetIDs:
     #class for storing and retrieving most recent tweet IDs for all users being
@@ -82,14 +82,14 @@ def respondToUser(twt):
     status = '@' + twt.user.screen_name + ' ' + status
     status += ' #' + random.choice(hash_tags)
     api.PostUpdate(status,in_reply_to_status_id=twt.id)
-    print 'posted "{}" in reply to @{}'.format(status,twt.user.screen_name)
+    print('posted "{}" in reply to @{}'.format(status,twt.user.screen_name))
 
 def randomTweet():
 
     status = predict()
     status += '#' + random.choice(hash_tags)
     api.PostUpdate(status)
-    print 'posted tweet: {}'.format(status)
+    print('posted tweet: {}'.format(status))
 
 def findUserTweet(user):
     #finds most recent tweet from user
