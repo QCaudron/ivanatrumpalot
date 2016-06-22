@@ -81,14 +81,14 @@ def respondToUser(twt):
     status = '@' + twt.user.screen_name + ' ' + status
     status += ' #' + random.choice(hash_tags)
     api.PostUpdate(status,in_reply_to_status_id=twt.id)
-    print 'posted "{}" in reply to @{}'.format(status,twt.user.screen_name)
+    print('posted "{}" in reply to @{}'.format(status,twt.user.screen_name))
 
 def randomTweet():
 
     status = predict()
     status += ' #' + random.choice(hash_tags)
     api.PostUpdate(status)
-    print 'posted tweet: {}'.format(status)
+    print('posted tweet: {}'.format(status))
 
 def findUserTweet(user):
     #finds most recent tweet from user
