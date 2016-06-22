@@ -8,7 +8,7 @@ from keras.models import model_from_json
 
 
 
-def clean_text(text):
+def clean_text(text, alphabet=None):
 
     # Encode from unicode, ignoring characters that don't make sense in standard speech
     try:
@@ -16,7 +16,10 @@ def clean_text(text):
     except:
         pass
 
-    text = text.replace("Z", "z")
+    if alphabet is not None:
+        for char in set(text):
+            if char not in alphabet:
+                text.replace(char, "")
 
     # Fix a few problems : nuisance characters, new lines, extra spaces...
     nuisance_chars = ["\n", "=", "(", ")", "[", "[", "/"]
@@ -37,13 +40,13 @@ def clean_text(text):
 
 
 
-def predict(text):
+def predict(text=None):
 
     # Characters to predict
     prediction_length = 80
 
     # Temperature of the Boltzmann distribution
-    temperature = 0.2
+    temperature = 1
 
     # Load and compile the current model
     model = model_from_json(json.dumps(json.load(open("model.json"))))
@@ -74,9 +77,10 @@ def predict(text):
 
     # Initialise the predictions array
     y = text
+    generated = ""
 
     # Generate some predictions
-    for i in range(prediction_length):
+    while generated.count(".") != 2:
 
         # Initialise the prompt and
         X = np.zeros((1, primer_length, len(alphabet)))
@@ -90,6 +94,7 @@ def predict(text):
 
         # Add the prediction to the output array
         y += next_char
+        generated += next_char
 
     """
     # Remove the primer from the predictions
@@ -98,9 +103,8 @@ def predict(text):
     # Remove characters left and right such that we only have full sentences
     y = ". ".join(y.split(". ")[1:-1]) + "."
     """
-    y = y[-prediction_length:]
 
-    return y
+    return generated.split(".")[1] + "."
 
 
 # Helper function :
