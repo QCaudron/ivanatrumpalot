@@ -4,3 +4,4 @@ secrets/
 model.json
 weights.h5
 code/required_objects.pickle
+.DS_Store
