@@ -1,4 +1,4 @@
 secrets/
 model.json
 weights.h5
-required_objects.pickle
+code/required_objects.pickle
