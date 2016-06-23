@@ -5,7 +5,6 @@ import pickle
 from datetime import datetime
 import random
 import logging
-
 import numpy as np
 from twitter import Api
 
@@ -17,6 +16,7 @@ os.chdir("/root/ivanatrumpalot/code")
 
 # General parameters
 logging.basicConfig(level=logging.DEBUG, filename="../model/logs")
+
 
 my_name = 'ivanatrumpalot'
 
@@ -60,17 +60,13 @@ class TweetIDs:
         try:
             with open(TweetIDs.filename, 'rb') as f:
                 user_tweet_ids = pickle.load(f)
-            if len(user_tweet_ids) != len(users_to_respond): #if added new users.
-                new_ids = []
-                for i,user in enumerate(users_to_respond):
-                    if i < len(user_tweet_ids):
-                        new_ids.append(user_tweet_ids[i])
-                    else:
-                        new_ids.append(0)
-                user_tweet_ids = new_ids
+            for user in users_to_respond: #if added new users
+                if user not in user_tweet_ids:
+                    user_tweet_ids[user] = 0
             return user_tweet_ids
         except:
-            return [0 for u in range(len(users_to_respond))]
+            logging.error('couldn\'t open user_tweet_ids.')
+            return {user:0 for user in users_to_respond}
 
 
 # load in api_keys dictionary with keys: CONSUMER_KEY, CONSUMER_SECRET,
@@ -78,8 +74,7 @@ class TweetIDs:
 with open('../secrets/api_keys', 'rb') as f:
     api_keys = pickle.load(f)
 
-# read in most recent tweet ids from file.
-user_tweet_ids = TweetIDs.readIDs()
+
 
 #load dictionary of users had direct messages with, with most recent id.
 user_dm_filename = '../model/user_dm_twts'
@@ -138,11 +133,15 @@ def setUserTweetIDs(users):
 def replyIfUpdate():
     # for each user to respond to, check if most recent tweet ID is
     # the same as tweet already stored. If not then respond to user.
-    for i,user in enumerate(users_to_respond):
+
+    # read in most recent tweet ids from file.
+    user_tweet_ids = TweetIDs.readIDs()
+    for user in users_to_respond:
         cur_twt = findUserTweet(user)
-        if cur_twt.id != user_tweet_ids[i]:
-            user_tweet_ids[i] = cur_twt.id
+        if cur_twt.id != user_tweet_ids[user]:
+            user_tweet_ids[user] = cur_twt.id
             respondToUser(cur_twt)
+    TweetIDs.setIDs(user_tweet_ids) #save user_tweet_ids
 
 
 def replyIfMessaged():
@@ -181,6 +180,7 @@ def replyIfMessaged():
         #save updated list
         with open(user_dm_filename, 'wb') as f:
                 pickle.dump(user_dm_twts, f)
+
 
 
 
