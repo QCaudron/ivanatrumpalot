@@ -1,3 +1,4 @@
+import os
 import sys
 import re
 import numpy as np
@@ -7,6 +8,8 @@ import pickle
 from keras.models import model_from_json
 
 
+# Code directory
+os.chdir("/root/ivanatrumpalot/code")
 
 def clean_text(text, alphabet=None):
 
@@ -46,8 +49,8 @@ def predict(text=None):
     temperature = 1.1
 
     # Load and compile the current model
-    model = model_from_json(json.dumps(json.load(open("model.json"))))
-    model.load_weights("weights.h5")
+    model = model_from_json(json.dumps(json.load(open("../model/model.json"))))
+    model.load_weights("../model/weights.h5")
     model.compile(loss="categorical_crossentropy", optimizer="adam")
 
     # Read in the required objects
