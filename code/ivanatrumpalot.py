@@ -42,11 +42,8 @@ def clean_text(text, alphabet=None):
 
 def predict(text=None):
 
-    # Characters to predict
-    prediction_length = 80
-
     # Temperature of the Boltzmann distribution
-    temperature = 1
+    temperature = 1.1
 
     # Load and compile the current model
     model = model_from_json(json.dumps(json.load(open("model.json"))))
@@ -96,21 +93,13 @@ def predict(text=None):
         y += next_char
         generated += next_char
 
-    """
-    # Remove the primer from the predictions
-    y = y[-prediction_length:]
-
-    # Remove characters left and right such that we only have full sentences
-    y = ". ".join(y.split(". ")[1:-1]) + "."
-    """
-
     return generated.split(".")[1] + "."
 
 
 # Helper function :
 # Sample from a Boltzmann distribution with energies proportional to the probabilities
 # returned by the LSTM network, as a function of a temperature parameter
-def sample(energies, temperature=1.0):
+def sample(energies, temperature=1):
     energies = np.log(energies) / temperature
     energies = np.exp(energies) / np.sum(np.exp(energies))
     return np.argmax(np.random.multinomial(1, energies))
