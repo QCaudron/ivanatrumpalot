@@ -23,6 +23,10 @@ from ivanatrumpalot import clean_text, predict, sample
 # If the string "extend" is passed, they must be the files saved by train_lstm.py previously.
 # If the string "predict" is passed,
 
+
+# Code directory
+os.chdir("/root/ivanatrumpalot/code")
+
 # Read and clean corpus
 text = clean_text(open("../data/trump_corpus").read())
 

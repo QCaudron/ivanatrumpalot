@@ -1,3 +1,4 @@
+import os
 import sys
 import re
 import numpy as np
@@ -7,6 +8,8 @@ import pickle
 from keras.models import model_from_json
 
 
+# Code directory
+os.chdir("/root/ivanatrumpalot/code")
 
 def clean_text(text, alphabet=None):
 

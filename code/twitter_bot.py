@@ -12,6 +12,9 @@ from twitter import Api
 from ivanatrumpalot import predict
 
 
+# Code directory
+os.chdir("/root/ivanatrumpalot/code")
+
 # General parameters
 logging.basicConfig(level=logging.DEBUG, filename="../model/logs")
 
