@@ -7,6 +7,11 @@ import pickle
 import datetime
 import random
 from ivanatrumpalot import predict
+import logging
+
+#set logger to record errors
+logging.basicConfig(filename="errors.log", level=logging.INFO)
+log = logging.getLogger("ex")
 
 my_name = 'IvanaTrumpalot'
 
@@ -87,7 +92,7 @@ def respondToUser(twt):
         api.PostUpdate(status,in_reply_to_status_id=twt.id)
         print('posted "{}" in reply to @{}'.format(status,twt.user.screen_name))
     else:
-        print('Failed to post "{}" in reply to @{}. Character length over 140.'.format(status,twt.user.screen_name)) 
+        print('Failed to post "{}" in reply to @{}. Character length over 140.'.format(status,twt.user.screen_name))
 
 def randomTweet():
 
@@ -163,12 +168,25 @@ def replyIfMessaged():
                 pickle.dump(user_dm_twts, f)
 
 if __name__ == '__main__':
+
+
     #reply to user if they have updated tweet and update tweet ids.
-    replyIfUpdate()
+    try:
+        replyIfUpdate()
+    except Exception, err:
+        log.exception("Error!")
+
     TweetIDs.setIDs(user_tweet_ids)
+
     #If within ten minutes of the hour tweet
     now = datetime.datetime.now()
     if (now.minute<5 or now.minute>55):
-        randomTweet()
+        try:
+            randomTweet()
+        except Exception, err:
+            log.exception("Error!")
     #respond to messages addressed to bot
-    replyIfMessaged()
+    try:
+        replyIfMessaged()
+    except Exception, err:
+        log.exception("Error!")
